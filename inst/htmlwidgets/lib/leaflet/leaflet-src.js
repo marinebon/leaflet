@@ -11684,9 +11684,20 @@ var TileLayerWMS = TileLayer.extend({
 		    [min.y, min.x, max.y, max.x] :
 		    [min.x, min.y, max.x, max.y]).join(','),
 		url = L.TileLayer.prototype.getTileUrl.call(this, coords);
-		return url +
+/*		return url +
 			getParamString(this.wmsParams, url, this.options.uppercase) +
 			(this.options.uppercase ? '&BBOX=' : '&bbox=') + bbox;
+*/
+		// @bbest hack to map layers from https://earthdata.nasa.gov/
+		//	  a la https://github.com/nasa-gibs/gibs-web-examples
+		if (url_plus.match('earthdata') !== null){
+      return url;
+    } else {
+      return url +
+        getParamString(this.wmsParams, url, this.options.uppercase) +
+        (this.options.uppercase ? '&BBOX=' : '&bbox=') + bbox;
+    }
+
 	},
 
 	// @method setParams(params: Object, noRedraw?: Boolean): this
